@@ -1,0 +1,3 @@
+create game char running animaiton
+add tests
+fix canyon drawing logic
