@@ -1,3 +1,18 @@
-create game char running animaiton
-add tests
-fix canyon drawing logic
+[Graphics and Animation]
+- Create game character running animation
+- Create shooting animation
+- Fix canyon drawing logic
+- Make cloud logic better
+
+[Game Mechanics]
+- Add tests for game modes
+- Randomly spawn bullets on the map
+- Make enemy smarter
+
+[User Experience]
+- Full screen logic
+- Store player high scores and stats in an encrypted file
+- Create a store where players can buy things with money earned
+
+[Memory and Performance]
+- Clear memory after a level is complete
