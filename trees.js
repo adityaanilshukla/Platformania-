@@ -12,6 +12,7 @@ function drawTree(tree) {
 
 //appends tree positions to tree array
 //increases amount of trees with game difficulty
+//add comment here
 function appendTrees() {
   while (trees.length < (7 + 4 * levelDifficulty)) {
     var x = random(200, levelLength);

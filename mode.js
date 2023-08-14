@@ -1,31 +1,37 @@
 /////////////////////////////////Display Screens When You switch between modes/////////////////////////////////
-// mode 0 is start of game
-// mode 1 is game running
-// mode 2 is when player runs out of lives
-// mode 3 is when player completes level
+// drawGameMenu is start of game
+// drawOutOfLivesPage is when player runs out of lives
+// drawCompleteLevelPage is when player completes level
+// displayPlayerStatsPage displays player stats
 
-//Game menu when you first launch game
-function mode0() {
+function drawGameMenu() {
 
   // draw background screen
   menuBackground();
 
   textSize(70);
+  textAlign(CENTER); // Set text alignment to center
   //random function to create shimmering text effect
   fill(random(0, 255), 0, 0);
-  text('PLATFORMANIA!', width / 4.5, height / 5);
+  text('PLATFORMANIA!', width / 2, height / 5); // Center the text on the x-axis
   fill(255, 255, 255);
-
   textSize(30);
   // prompt player to either play game or look at controls
-  text('press enter to start game', width / 3, height / 2.5);
+  text('press enter to start game', width / 2, height / 2.5); // Center the text on the x-axis
   textSize(20);
-  text('press space to shoot enemies', width / 2.8, height / 3 + 150);
-  text('press arrow keys to move character', width / 3, height / 3 + 200);
+
+  verticalSpace = 0.269 * height //vertical grows in proportion to height
+
+  text('press space to shoot enemies', width / 2, height / 4 + verticalSpace); // Center the text on the x-axis
+  text('press arrow keys to move character', width / 2, height / 4 + verticalSpace*1.3); // Center the text on the x-axis
+  text('press / to view your stats', width / 2, height / 4 + verticalSpace*1.6); // Center the text on the x-axis
+  textAlign(LEFT); //reset textAlign
 }
 
+
+
 // menu when player loses all lives
-function mode2() {
+function drawOutOfLivesPage() {
 
   // draw background screen
   menuBackground();
@@ -47,7 +53,7 @@ function mode2() {
 }
 
 //menu when player completes level
-function mode3() {
+function drawCompleteLevelPage() {
 
   // draw background screen
   menuBackground();
@@ -65,6 +71,42 @@ function mode3() {
   }
 
 }
+
+function displayPlayerStats() {
+  // Set up the player stats data
+  const playerStats = {
+    "highScore": 2350,
+    "totalMoneyEarned": 550,
+    "totalLevelsCompleted": 12,
+    "totalEnemiesKilled": 32,
+    "totalEnemiesAvoided": 18,
+    "totalDistanceTraveled": 12000,
+    "totalTimesDied": 5
+  };
+
+  // Clear the screen
+  menuBackground(0);
+
+  // Set up text display
+  textSize(30);
+  textAlign(CENTER);
+  fill(255);
+
+  // Display each player stat
+  let yPos = height / 4;
+  for (let key in playerStats) {
+    text(`${key}: ${playerStats[key]}`, width / 2, yPos);
+    yPos += 50; // Adjust the y-position for the next line
+  }
+
+  // Prompt to return to menu
+  textSize(20);
+  text('Press Enter to return to the menu', width / 2, height - 50);
+  
+  textAlign(LEFT); // Reset textAlign
+}
+
+
 
 //background for menu screens
 function menuBackground() {
