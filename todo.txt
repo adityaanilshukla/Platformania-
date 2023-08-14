@@ -16,3 +16,7 @@
 
 [Memory and Performance]
 - Clear memory after a level is complete
+
+[Other Annoyances]
+- Fix the [Deprecation] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet) alert in console
+- add favicon to get rid of that studpid warning

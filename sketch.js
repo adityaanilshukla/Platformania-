@@ -1,4 +1,3 @@
-
 // object for switching between various game modes
 const mode = {
   gameMenu: false,
@@ -29,6 +28,7 @@ let gameChar_world_y;
 let gameChar_width;
 let gameCharLives;
 let gameScore;
+let oldScores;
 
 //declaring bullets array
 let bullets = [];
@@ -68,11 +68,71 @@ let platforms;
 let enemies;
 let flagPole;
 
+//stuff TO BE MOVED LATER!!
+
+//store current Game stats
+let currentGameStats = {
+  highestLevel: 0,
+  highScore: 0,
+};
+
+//functions to load old scores from text files
+
+function loadOldScores() {
+  const storedScores = localStorage.getItem("playerScores");
+  if (storedScores) {
+    oldScores = JSON.parse(storedScores);
+  } else {
+    oldScores = {
+      highestLevel: 0,
+      highScore: 0,
+      // ...other stats...
+    };
+    saveScores();
+  }
+}
+
+function fileLoaded(data) {
+  try {
+    oldScores = JSON.parse(data.join(""));
+  } catch (error) {
+    console.error("Error parsing player stats:", error);
+  }
+}
+
+//checks if player has exceeded old scores
+function updateLocalStorageStats(currentGameStats) {
+  if (!oldScores) return;
+
+  if (currentGameStats.highScore > oldScores.highScore) {
+    oldScores.highScore = currentGameStats.highScore;
+    saveScores();
+  }
+
+  if (currentGameStats.highestLevel > oldScores.highestLevel) {
+    oldScores.highestLevel = currentGameStats.highestLevel;
+    saveScores();
+  }
+}
+
+// Update the player's stats during gameplay.
+function updateCurrentGameStats() {
+  currentGameStats.highScore = gameScore;
+  currentGameStats.highestLevel += 1;
+}
+
+function saveScores() {
+  localStorage.setItem("playerScores", JSON.stringify(oldScores));
+  console.log("Scores saved to local storage.");
+}
+
 //load sounds and volumes
 function preload() {
+  print("in preload");
+  loadOldScores();
   soundFormats("mp3", "wav");
   collectableSound = loadSound("assets/ChimeBellMuted1.mp3");
-  runSound = loadSound("assets/FootstepsGrass3.mp3");
+  //runSound = loadSound("assets/FootstepsGrass3.mp3");
   jumpSound = loadSound("assets/BootsJump1.mp3");
   flagPoleSound = loadSound("assets/xmasbell");
   fallingDeath = loadSound("assets/Body Falling Sound.mp3");
@@ -82,7 +142,7 @@ function preload() {
   sadTune = loadSound("assets/Nostalgia.mp3");
 
   collectableSound.setVolume(0.1);
-  runSound.setVolume(0.4);
+  //runSound.setVolume(0.4);
   jumpSound.setVolume(0.5);
   flagPoleSound.setVolume(0.03);
   fallingDeath.setVolume(0.8);
@@ -90,6 +150,7 @@ function preload() {
   backgroundMusic.setVolume(0.05);
   levelComplete.setVolume(0.1);
   sadTune.setVolume(0.1);
+  print("done with preload");
 }
 
 function setup() {
@@ -110,6 +171,7 @@ function draw() {
   clear();
   if (mode.gameMenu) {
     drawGameMenu();
+    //print(oldScores);
   }
 
   //game playing mode
@@ -137,6 +199,26 @@ function draw() {
     drawTrees();
     drawCollectables();
     renderFlagPole();
+
+    //testing code pls dont touch
+
+    // Display current stats
+    fill(0);
+    textSize(24);
+    textAlign(CENTER);
+    text("Current Stats:", 20, 40);
+    text(`High Score: ${currentGameStats.highScore}`, 20, 80);
+    text(`Highest Level: ${currentGameStats.highestLevel}`, 20, 120);
+
+    // Display old stats
+    fill(0);
+    textSize(24);
+    text("Old Stats:", 220, 40);
+    if (oldScores) {
+      text(`High Score: ${oldScores.highScore}`, 220, 80);
+      text(`Highest Level: ${oldScores.highestLevel}`, 220, 120);
+    }
+
     collectCollectables();
     fallIntoCanyonCheck();
     checkIfGameCharInContactWithEnemies();
@@ -188,9 +270,7 @@ function draw() {
     }
     if (isRight) {
       gameChar_world_x += 5;
-    }
-
-    // prevent player from going beyond leftmost level boundry
+    } // prevent player from going beyond leftmost level boundry
     function CheckIfGameCharIsLeftBoundry() {
       if (gameChar_world_x < 100) {
         gameChar_world_x += 5;
@@ -222,6 +302,8 @@ function draw() {
       isLeft == false;
       isRight == false;
       changeMode(mode, "playerCompletedLevel");
+      updateLocalStorageStats(currentGameStats);
+      updateCurrentGameStats();
     }
 
     //display game stats
@@ -308,6 +390,7 @@ function moveBullets() {
         enemies.splice(i, 1);
         bullets.splice(j, 1);
         gameScore += 10;
+        currentGameStats.highScore = gameScore;
         break;
       }
     }
@@ -387,6 +470,7 @@ function collectCollectables() {
     ) {
       collectables[i].isFound = true;
       gameScore += 1;
+      currentGameStats.highScore = gameScore;
       //remove collected collectable from array
       collectables.splice(i, 1);
       // play collectable sound
@@ -428,6 +512,8 @@ function livesCounter() {
   // if player runs out of lives change mode and reset amount of lives
   if (gameCharLives == 0) {
     changeMode(mode, "playerOutOfLives");
+    currentGameStats.highScore = 0;
+    currentGameStats.highestLevel = 0;
     gameCharLives = 3;
   }
 }
@@ -458,7 +544,8 @@ function keyPressed() {
   }
 
   //switch to stats page from gameMenu
-  if (mode.gameMenu && keyCode === 191) {// the / key
+  if (mode.gameMenu && keyCode === 191) {
+    // the / key
     changeMode(mode, "statsPage");
   }
 
@@ -494,10 +581,10 @@ function keyPressed() {
   }
   if (keyCode == 37) {
     isLeft = true;
-    runSound.play();
+    //runSound.play();
   } else if (keyCode == 39) {
     isRight = true;
-    runSound.play();
+    //runSound.play();
   } else if (keyCode == 38) {
     //character can only jump when he is on the ground or on a platform
     // jumpSound only plays if game is playing
@@ -520,9 +607,9 @@ function keyReleased() {
   // keys are released.
   if (keyCode == 37) {
     isLeft = false;
-    runSound.stop();
+    //runSound.stop();
   } else if (keyCode == 39) {
     isRight = false;
-    runSound.stop();
+    //runSound.stop();
   }
 }

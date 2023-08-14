@@ -1,0 +1,11 @@
+{
+  "highestLevel": 0,
+  "highScore": 0,
+  "totalMoneyEarned": 0,
+  "totalLevelsCompleted": 0,
+  "totalEnemiesKilled": 0,
+  "totalEnemiesAvoided": 0,
+  "totalDistanceTraveled": 0,
+  "totalTimesDied": 0
+}
+

@@ -15,7 +15,7 @@ $wshell.AppActivate("Windows Terminal")
 # Tab 1
 Start-Sleep -Milliseconds 500
 $wshell.SendKeys("cd \SIM-year1-base\term-1.1\ITP\Game-project\Submission\final-sub-folder\Platformania!{ENTER}")
-$wshell.SendKeys('$Host.UI.RawUI.WindowTitle = "todo"')
+$wshell.SendKeys('$Host.UI.RawUI.WindowTitle = "text files"')
 $wshell.SendKeys("{ENTER}")
 $wshell.SendKeys("nvim todo.txt{ENTER}")
 Start-Sleep -Milliseconds 500

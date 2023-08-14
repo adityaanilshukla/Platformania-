@@ -59,8 +59,9 @@ function drawCompleteLevelPage() {
   menuBackground();
   fill(255, 255, 255);
   textSize(50);
-  text('Level Complete!', 250, 180);
-  text('Press enter to start next level', 250, 260);
+  textAlign(CENTER,CENTER);
+  text('Level Complete!', width/2, 180);
+  text('Press enter to start next level', width/2 , 260);
   backgroundMusic.stop();
 
   // ensure that levelComplete is only played once
@@ -70,11 +71,15 @@ function drawCompleteLevelPage() {
     levelComplete_Played = true;
   }
 
+  //reset textAlign
+  textAlign(LEFT);
+
 }
 
 function displayPlayerStats() {
   // Set up the player stats data
-  const playerStats = {
+  const thisPageStats = {
+    "highestLevel": 23,
     "highScore": 2350,
     "totalMoneyEarned": 550,
     "totalLevelsCompleted": 12,
@@ -95,7 +100,7 @@ function displayPlayerStats() {
   // Display each player stat
   let yPos = height / 4;
   for (let key in playerStats) {
-    text(`${key}: ${playerStats[key]}`, width / 2, yPos);
+    text(`${key}: ${thisPageStats[key]}`, width / 2, yPos);
     yPos += 50; // Adjust the y-position for the next line
   }
 
