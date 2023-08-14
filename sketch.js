@@ -1,44 +1,3 @@
-// commentary
-//
-// Platforms Extension
-// I implemented the platforms extension into my game using constructor functions. In my game
-// there are three types of platforms, static, horizontally moving and vertically moving platforms.
-//
-// vertically moving platforms
-// At the start of the game level, a vertically moving platform brings the player to an altitude at which static platforms are found.
-// These static platforms are evenly spaced and extend till the end of the game level. This gives the player the option of compleating the level by
-// avoiding most of the ground obstacles.
-//
-// horizontally moving platforms
-// Secondly, I added horizontally moving platforms across wide canyons. These canyons are too wide for the player to jump across. To cross these wide canyons,
-// the player must jump onto the horizontally moving platforms and hitch a ride across. If the player does not time his/her jump properly, they will fall into the canyon.
-//
-//
-// challenging portions
-// I found the moving platforms extension particulary challenging to implement. This was primarily due to the different syntax used by constructor functions.
-// Not being used to the syntax, lead to bugs that took hours to correct. A particualr bug that I faced was the platform not changing direction upon reacahing its maximum
-// range. This was occuring as I was passing the platform three arguments instead of four. Since the update function did not have enough information, the platform did not change
-// direction. Debugging these errors ultimately improved my understanding of constructor functions.
-//
-// Skills I learnt
-// I learnt how to debug and work around problems in my code. This helped me understand how a programmer must think. Futhermore I learnt how to write code intelligently using commets
-// and constructor functions.
-
-// Refrences
-// body falling sound
-// nathanolson. (2015, September 9). Body Falls Various Sound FX
-//   [Video]. YouTube. https://www.youtube.com/watch?v=IMIC_Ttf3NU&ab_channel=nathanolson
-//
-// Gunshot sound
-// Mister Sound. (2018, September 17). Realistic Gunshot Sound Effect
-//   [Video]. YouTube. https://www.youtube.com/watch?v=f53fti1kwgc&ab_channel=MisterSound
-//
-// Nostalgia
-// xmasbell
-// backgroundMusic
-// Boss_Time
-// Royalty Free 8-Bit Background Music Downloads. (n.d.). Royalty Free 8-Bit Background Music Downloads. Fesliyanstudios. Retrieved March 27, 2022,
-//   from https://www.fesliyanstudios.com/royalty-free-music/downloads-c/8-bit-music/6
 
 // object for switching between various game modes
 const mode = {
@@ -113,7 +72,7 @@ let flagPole;
 function preload() {
   soundFormats("mp3", "wav");
   collectableSound = loadSound("assets/ChimeBellMuted1.mp3");
-  //runSound = loadSound("assets/FootstepsGrass3.mp3");
+  runSound = loadSound("assets/FootstepsGrass3.mp3");
   jumpSound = loadSound("assets/BootsJump1.mp3");
   flagPoleSound = loadSound("assets/xmasbell");
   fallingDeath = loadSound("assets/Body Falling Sound.mp3");
@@ -123,7 +82,7 @@ function preload() {
   sadTune = loadSound("assets/Nostalgia.mp3");
 
   collectableSound.setVolume(0.1);
-  //runSound.setVolume(0.4);
+  runSound.setVolume(0.4);
   jumpSound.setVolume(0.5);
   flagPoleSound.setVolume(0.03);
   fallingDeath.setVolume(0.8);
@@ -535,10 +494,10 @@ function keyPressed() {
   }
   if (keyCode == 37) {
     isLeft = true;
-    //runSound.play();
+    runSound.play();
   } else if (keyCode == 39) {
     isRight = true;
-    //runSound.play();
+    runSound.play();
   } else if (keyCode == 38) {
     //character can only jump when he is on the ground or on a platform
     // jumpSound only plays if game is playing
@@ -561,9 +520,9 @@ function keyReleased() {
   // keys are released.
   if (keyCode == 37) {
     isLeft = false;
-    //runSound.stop();
+    runSound.stop();
   } else if (keyCode == 39) {
     isRight = false;
-    //runSound.stop();
+    runSound.stop();
   }
 }
