@@ -1,0 +1,36 @@
+
+1. **Fetch Updates from Remote:** Start by fetching the latest updates from the remote repository to ensure you have the most up-to-date information about all branches.
+
+   ```bash
+   git fetch origin
+   ```
+
+2. **Switch to the Branch:** If you are not already on the `store-player-stats` branch, switch to it using the following command:
+
+   ```bash
+   git checkout store-player-stats
+   ```
+
+3. **Merge Remote Changes:** Merge the changes from the remote `store-player-stats` branch into your local branch:
+
+   ```bash
+   git merge origin/store-player-stats
+   ```
+
+   This will incorporate the changes from the remote branch into your local branch.
+
+4. **Resolve Conflicts (if any):** If there are conflicts during the merge, you will need to resolve them by editing the affected files, marking the conflicts as resolved, and then committing the changes.
+
+   ```bash
+   # After resolving conflicts
+   git add .
+   git commit -m "Resolve merge conflicts"
+   ```
+
+5. **Push Changes to Remote:** If everything merges cleanly, you can then push the changes back to the remote repository:
+
+   ```bash
+   git push origin store-player-stats
+   ```
+
+Now, your local `store-player-stats` branch should be updated with the changes from the remote branch. You can continue working on this branch, making further changes or testing without affecting the `main` branch. When you're ready, you can merge your changes from `store-player-stats` into the `main` branch.

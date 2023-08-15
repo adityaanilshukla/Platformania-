@@ -27,7 +27,7 @@ let gameChar_world_x;
 let gameChar_world_y;
 let gameChar_width;
 let gameCharLives;
-let gameScore;
+//let gameScore;
 let oldScores;
 
 //declaring bullets array
@@ -72,10 +72,24 @@ let flagPole;
 
 //store current Game stats
 let currentGameStats = {
-  highestLevel: 0,
-  highScore: 0,
+  level: 1,
+  gameScore: 0,
 };
 
+function changeLocalScore(property, value) {
+  if (!oldScores) {
+    console.error("No oldScores found.");
+    return;
+  }
+
+  if (oldScores.hasOwnProperty(property)) {
+    oldScores[property] = value;
+    saveScores();
+    console.log(`Updated ${property} in local storage.`);
+  } else {
+    console.error(`Property ${property} does not exist in oldScores.`);
+  }
+}
 //functions to load old scores from text files
 
 function loadOldScores() {
@@ -104,31 +118,46 @@ function fileLoaded(data) {
 function updateLocalStorageStats(currentGameStats) {
   if (!oldScores) return;
 
-  if (currentGameStats.highScore > oldScores.highScore) {
-    oldScores.highScore = currentGameStats.highScore;
+  if (currentGameStats.gameScore > oldScores.highScore) {
+    oldScores.highScore = currentGameStats.gameScore;
     saveScores();
   }
 
-  if (currentGameStats.highestLevel > oldScores.highestLevel) {
-    oldScores.highestLevel = currentGameStats.highestLevel;
+  if (currentGameStats.level > oldScores.highestLevel) {
+    oldScores.highestLevel = currentGameStats.level;
     saveScores();
   }
 }
 
 // Update the player's stats during gameplay.
 function updateCurrentGameStats() {
-  currentGameStats.highScore = gameScore;
-  currentGameStats.highestLevel += 1;
+  currentGameStats.level += 1;
 }
 
 function saveScores() {
-  localStorage.setItem("playerScores", JSON.stringify(oldScores));
-  console.log("Scores saved to local storage.");
+  const storedScores = localStorage.getItem("playerScores");
+
+  if (storedScores) {
+    const storedStats = JSON.parse(storedScores);
+
+    if (oldScores.highScore > storedStats.highScore) {
+      storedStats.highScore = oldScores.highScore;
+    }
+
+    if (oldScores.highestLevel > storedStats.highestLevel) {
+      storedStats.highestLevel = oldScores.highestLevel;
+    }
+
+    localStorage.setItem("playerScores", JSON.stringify(storedStats));
+    console.log("Updated scores saved to local storage.");
+  } else {
+    localStorage.setItem("playerScores", JSON.stringify(oldScores));
+    console.log("Scores saved to local storage.");
+  }
 }
 
 //load sounds and volumes
 function preload() {
-  print("in preload");
   loadOldScores();
   soundFormats("mp3", "wav");
   collectableSound = loadSound("assets/ChimeBellMuted1.mp3");
@@ -150,19 +179,17 @@ function preload() {
   backgroundMusic.setVolume(0.05);
   levelComplete.setVolume(0.1);
   sadTune.setVolume(0.1);
-  print("done with preload");
 }
 
 function setup() {
   // initialise thse variables at start of game
   // initialise gameMenu so that player sees main menu
   mode.gameMenu = true;
+  changeLocalScore("highestLevel", 1);
   levelDifficulty = 1;
   createCanvas(1024, 576);
   gameCharLives = 3;
   levelLength = 7000;
-  gameScore = 0;
-  gameLevel = 1;
   resetSketch();
 }
 
@@ -207,8 +234,8 @@ function draw() {
     textSize(24);
     textAlign(CENTER);
     text("Current Stats:", 20, 40);
-    text(`High Score: ${currentGameStats.highScore}`, 20, 80);
-    text(`Highest Level: ${currentGameStats.highestLevel}`, 20, 120);
+    text(`Score: ${currentGameStats.gameScore}`, 20, 80);
+    text(`Level: ${currentGameStats.level}`, 20, 120);
 
     // Display old stats
     fill(0);
@@ -311,8 +338,8 @@ function draw() {
     noStroke();
     textSize(20);
     text("Lives: " + gameCharLives, 20, 20);
-    text("score: " + gameScore, 140, 20);
-    text("Level: " + gameLevel, 260, 20);
+    text("score: " + currentGameStats.gameScore, 140, 20);
+    text("Level: " + currentGameStats.level, 260, 20);
     text("Difficulty: " + levelDifficulty + "/5", 900, 20);
   }
 
@@ -389,8 +416,7 @@ function moveBullets() {
       if (isShot == true) {
         enemies.splice(i, 1);
         bullets.splice(j, 1);
-        gameScore += 10;
-        currentGameStats.highScore = gameScore;
+        currentGameStats.gameScore += 10;
         break;
       }
     }
@@ -469,8 +495,7 @@ function collectCollectables() {
       ) < 20
     ) {
       collectables[i].isFound = true;
-      gameScore += 1;
-      currentGameStats.highScore = gameScore;
+      currentGameStats.gameScore += 1;
       //remove collected collectable from array
       collectables.splice(i, 1);
       // play collectable sound
@@ -512,8 +537,8 @@ function livesCounter() {
   // if player runs out of lives change mode and reset amount of lives
   if (gameCharLives == 0) {
     changeMode(mode, "playerOutOfLives");
-    currentGameStats.highScore = 0;
-    currentGameStats.highestLevel = 0;
+    currentGameStats.gameScore = 0;
+    currentGameStats.level = 1;
     gameCharLives = 3;
   }
 }
@@ -571,7 +596,7 @@ function keyPressed() {
       //used to increase the length of the level
       levelLength += 2000;
     }
-    gameLevel += 1;
+    currentGameStats.level += 1;
     resetSketch();
   }
   // if player presses spacebar call createBullets

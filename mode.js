@@ -38,8 +38,8 @@ function drawOutOfLivesPage() {
   fill(255, 255, 255);
   textSize(50);
   text('You Died', 250, 140);
-  text('Level Reached: ' + gameLevel, 250, 200);
-  text('Score: ' + gameScore, 250, 260);
+  text('Level Reached: ' + currentGameStats.level, 250, 200);
+  text('Score: ' + currentGameStats.gameScore, 250, 260);
   text('Press enter to restart', 250, 320);
   backgroundMusic.stop();
 
