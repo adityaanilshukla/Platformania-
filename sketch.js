@@ -191,7 +191,7 @@ function draw() {
 
     // make player fall when Plummeting
     // restrict player movement so they cant move in canyon
-    if (isPlummeting == true) {
+    if (isPlummeting) {
       gameChar_world_y += 10;
       isLeft = false;
       isRight = false;
@@ -233,7 +233,7 @@ function draw() {
         let enemy = enemies[i];
         let isContact = enemy.checkContact(gameChar_world_x, gameChar_world_y);
         // if player touches enemies reduce lives
-        if (isContact == true) {
+        if (isContact) {
           hitByEnemy = true;
           gameCharLives--;
           break;
@@ -284,7 +284,7 @@ function createBullets() {
 
   // if character is facing left bullets move in negative direction
   let bulletSpeed = 8;
-  if (isLeft == true) {
+  if (isLeft) {
     bulletSpeed = -bulletSpeed;
   }
 
@@ -383,7 +383,7 @@ function checkIfGameCharIsOnAnyPlatforms() {
     for (i in platforms) {
       var platform = platforms[i];
       var isContact = platform.checkContact(gameChar_world_x, gameChar_world_y);
-      if (isContact == true) {
+      if (isContact) {
         onPlatform = true;
         if (platform instanceof HorizontalMovePlatform) {
           gameChar_world_x += platform.direction;
@@ -563,7 +563,7 @@ function keyPressed() {
 function keyReleased() {
   // return if game is over
   let isGameOver = checkIsGameOver();
-  if (isGameOver == true) {
+  if (isGameOver) {
     return;
   }
   // conditional statements to control the character when
