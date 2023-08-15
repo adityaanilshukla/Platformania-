@@ -1,6 +1,7 @@
 // draws a canyon
 function drawCanyon(t_Canyon) {
-  rect(t_Canyon.x_pos, floorPos_y, t_Canyon.width, 600);
+  //y-20 as green lines from the floor when the player jumps
+  rect(t_Canyon.x_pos, floorPos_y-20, t_Canyon.width, 600);
 }
 
 

@@ -99,7 +99,7 @@ function displayPlayerStats() {
 
   // Display each player stat
   let yPos = height / 4;
-  for (let key in playerStats) {
+  for (let key in thisPageStats) {
     text(`${key}: ${thisPageStats[key]}`, width / 2, yPos);
     yPos += 50; // Adjust the y-position for the next line
   }

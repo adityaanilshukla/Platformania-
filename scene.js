@@ -12,7 +12,7 @@ function drawCanyons() {
 //loop over trees array and draw trees
 function drawTrees() {
   for (var i = 0; i < trees.length; i++) {
-    var tree = trees[i]
+    var tree = trees[i];
     drawTree(tree);
   }
 }
@@ -20,7 +20,7 @@ function drawTrees() {
 //loop over mountains array and draw canyons
 function drawMountains() {
   for (var i = 0; i < mountains.length; i++) {
-    var mountain = mountains[i]
+    var mountain = mountains[i];
     drawMountain(mountain);
   }
 }
@@ -58,7 +58,6 @@ function drawSky() {
   background(100, 155, 255);
 }
 
-
 //Draws flagPole at end of level
 function renderFlagPole() {
   push();
@@ -80,11 +79,9 @@ function renderFlagPole() {
   pop();
 }
 
-
 // reset level and arrays containing in game object coordinates
 // this function is called whenever a new level is to be generated
 function resetSketch() {
-
   gameChar_x = width / 2;
   gameChar_world_x = gameChar_x;
   gameChar_y = floorPos_y;
@@ -97,7 +94,7 @@ function resetSketch() {
   isRight = false;
   isPlummeting = false;
   isFalling = false;
-  onPlatform = false
+  onPlatform = false;
   hitByEnemy = false;
 
   // declare platform and append platforms to level
@@ -141,5 +138,5 @@ function resetSketch() {
     isReached: false,
     bellRung: false,
     x_pos: levelLength + 600,
-  }
+  };
 }

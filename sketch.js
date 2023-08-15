@@ -27,14 +27,13 @@ let gameChar_world_x;
 let gameChar_world_y;
 let gameChar_width;
 let gameCharLives;
-//let gameScore;
 let oldScores;
 
 //declaring bullets array
 let bullets = [];
 
 // declaring y position of floor throughout game
-let floorPos_y = 450;
+const floorPos_y = 450;
 
 // damp letiable used for one pole filter
 const damp = 0.9;
@@ -68,93 +67,11 @@ let platforms;
 let enemies;
 let flagPole;
 
-//stuff TO BE MOVED LATER!!
-
 //store current Game stats
 let currentGameStats = {
   level: 1,
   gameScore: 0,
 };
-
-function changeLocalScore(property, value) {
-  if (!oldScores) {
-    console.error("No oldScores found.");
-    return;
-  }
-
-  if (oldScores.hasOwnProperty(property)) {
-    oldScores[property] = value;
-    saveScores();
-    console.log(`Updated ${property} in local storage.`);
-  } else {
-    console.error(`Property ${property} does not exist in oldScores.`);
-  }
-}
-//functions to load old scores from text files
-
-function loadOldScores() {
-  const storedScores = localStorage.getItem("playerScores");
-  if (storedScores) {
-    oldScores = JSON.parse(storedScores);
-  } else {
-    oldScores = {
-      highestLevel: 0,
-      highScore: 0,
-      // ...other stats...
-    };
-    saveScores();
-  }
-}
-
-function fileLoaded(data) {
-  try {
-    oldScores = JSON.parse(data.join(""));
-  } catch (error) {
-    console.error("Error parsing player stats:", error);
-  }
-}
-
-//checks if player has exceeded old scores
-function updateLocalStorageStats(currentGameStats) {
-  if (!oldScores) return;
-
-  if (currentGameStats.gameScore > oldScores.highScore) {
-    oldScores.highScore = currentGameStats.gameScore;
-    saveScores();
-  }
-
-  if (currentGameStats.level > oldScores.highestLevel) {
-    oldScores.highestLevel = currentGameStats.level;
-    saveScores();
-  }
-}
-
-// Update the player's stats during gameplay.
-function updateCurrentGameStats() {
-  currentGameStats.level += 1;
-}
-
-function saveScores() {
-  const storedScores = localStorage.getItem("playerScores");
-
-  if (storedScores) {
-    const storedStats = JSON.parse(storedScores);
-
-    if (oldScores.highScore > storedStats.highScore) {
-      storedStats.highScore = oldScores.highScore;
-    }
-
-    if (oldScores.highestLevel > storedStats.highestLevel) {
-      storedStats.highestLevel = oldScores.highestLevel;
-    }
-
-    localStorage.setItem("playerScores", JSON.stringify(storedStats));
-    console.log("Updated scores saved to local storage.");
-  } else {
-    localStorage.setItem("playerScores", JSON.stringify(oldScores));
-    console.log("Scores saved to local storage.");
-  }
-}
 
 //load sounds and volumes
 function preload() {
@@ -185,7 +102,6 @@ function setup() {
   // initialise thse variables at start of game
   // initialise gameMenu so that player sees main menu
   mode.gameMenu = true;
-  changeLocalScore("highestLevel", 1);
   levelDifficulty = 1;
   createCanvas(1024, 576);
   gameCharLives = 3;
@@ -198,7 +114,6 @@ function draw() {
   clear();
   if (mode.gameMenu) {
     drawGameMenu();
-    //print(oldScores);
   }
 
   //game playing mode
@@ -275,7 +190,7 @@ function draw() {
     }
 
     // make player fall when Plummeting
-    // restrict player movement so he cant move in canyon
+    // restrict player movement so they cant move in canyon
     if (isPlummeting == true) {
       gameChar_world_y += 10;
       isLeft = false;
@@ -296,11 +211,13 @@ function draw() {
       gameChar_world_x -= 5;
     }
     if (isRight) {
+      //testing
+      //gameChar_world_x += levelLength;
       gameChar_world_x += 5;
     } // prevent player from going beyond leftmost level boundry
     function CheckIfGameCharIsLeftBoundry() {
       if (gameChar_world_x < 100) {
-        gameChar_world_x += 5;
+        gameChar_world_x = 100;
       }
     }
 
@@ -325,12 +242,13 @@ function draw() {
     }
 
     //changes game mode once level is complete
+    //updateStats If user exceeds old stats
     if (gameChar_world_x >= flagPole.x_pos + 200) {
       isLeft == false;
       isRight == false;
       changeMode(mode, "playerCompletedLevel");
+      updateCurrentGameStats(); //for now it just updates level
       updateLocalStorageStats(currentGameStats);
-      updateCurrentGameStats();
     }
 
     //display game stats
@@ -367,7 +285,7 @@ function createBullets() {
   // if character is facing left bullets move in negative direction
   let bulletSpeed = 8;
   if (isLeft == true) {
-    bulletSpeed = -8;
+    bulletSpeed = -bulletSpeed;
   }
 
   // create object with bullet position and speed properties
@@ -413,7 +331,7 @@ function moveBullets() {
     for (j in bullets) {
       // check if is bullet strikes usign enemy constructor function
       let isShot = enemy.checkIfKilled(bullets[j].x_pos, bullets[j].y_pos);
-      if (isShot == true) {
+      if (isShot) {
         enemies.splice(i, 1);
         bullets.splice(j, 1);
         currentGameStats.gameScore += 10;
@@ -596,7 +514,6 @@ function keyPressed() {
       //used to increase the length of the level
       levelLength += 2000;
     }
-    currentGameStats.level += 1;
     resetSketch();
   }
   // if player presses spacebar call createBullets
@@ -604,6 +521,27 @@ function keyPressed() {
   if (keyCode == 32 && mode.gamePlaying) {
     createBullets();
   }
+
+  //testing local storage code
+  if (keyCode == 76) {
+    //l
+    changeLocalScore("highestLevel", 6);
+    currentGameStats.level = 4;
+    print("changed highest level");
+  }
+
+  if (keyCode == 83) {
+    //s
+    changeLocalScore("highScore", 90);
+    currentGameStats.gameScore = 91;
+    print("changed highest score");
+  }
+
+  if (keyCode == 68) {
+    //d
+    deleteLocalStorageScores();
+  }
+
   if (keyCode == 37) {
     isLeft = true;
     //runSound.play();
