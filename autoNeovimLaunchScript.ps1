@@ -1,68 +1,47 @@
+# Define the base directory path
+$baseDir = "\SIM-year1-base\term-1.1\ITP\Game-project\Submission\final-sub-folder\Platformania!"
 
-#auto script for launching this project
-#saves the trouble of creating six tabs in powershll
+# Function to create a new tab and execute commands
+function CreateNewTab($title, $commands) {
+    $wshell.SendKeys("^+t")
+    Start-Sleep -Milliseconds 500
+    $wshell.SendKeys("cd $baseDir{ENTER}")
+    $wshell.SendKeys('$Host.UI.RawUI.WindowTitle = "' + $title + '"')
+    $wshell.SendKeys("{ENTER}")
+    foreach ($command in $commands) {
+        $wshell.SendKeys("$command{ENTER}")
+    }
+    Start-Sleep -Milliseconds 500
+}
 
 # Start Windows Terminal
-Start-Process wt
+$wshell = New-Object -ComObject wscript.shell
+$wshell.AppActivate("Windows Terminal")
 
 # Sleep for a moment to let the Windows Terminal session start
 Start-Sleep -Seconds 2
 
-# Send shortcut keys to create new tabs and navigate to the desired directory
-$wshell = New-Object -ComObject wscript.shell
-$wshell.AppActivate("Windows Terminal")
-
 # Tab 1
-Start-Sleep -Milliseconds 500
-$wshell.SendKeys("cd \SIM-year1-base\term-1.1\ITP\Game-project\Submission\final-sub-folder\Platformania!{ENTER}")
-$wshell.SendKeys('$Host.UI.RawUI.WindowTitle = "Doccumenation"')
-$wshell.SendKeys("{ENTER}")
-$wshell.SendKeys("nvim todo.txt{ENTER}")
-Start-Sleep -Milliseconds 500
+$commands = @('$Host.UI.RawUI.WindowTitle = "Documentation"', 'nvim todo.txt')
+CreateNewTab "Documentation" $commands
 
 # Tab 2
-$wshell.SendKeys("^+t")
-Start-Sleep -Milliseconds 500
-$wshell.SendKeys("cd \SIM-year1-base\term-1.1\ITP\Game-project\Submission\final-sub-folder\Platformania!{ENTER}")
-$wshell.SendKeys('$Host.UI.RawUI.WindowTitle = "logic files"')
-$wshell.SendKeys("{ENTER}")
-$wshell.SendKeys("nvim sketch.js{ENTER}")
-Start-Sleep -Milliseconds 500
+$commands = @('$Host.UI.RawUI.WindowTitle = "Logic Files"', 'nvim sketch.js')
+CreateNewTab "Logic Files" $commands
 
 # Tab 3
-$wshell.SendKeys("^+t")
-Start-Sleep -Milliseconds 500
-$wshell.SendKeys("cd \SIM-year1-base\term-1.1\ITP\Game-project\Submission\final-sub-folder\Platformania!{ENTER}")
-$wshell.SendKeys('$Host.UI.RawUI.WindowTitle = "drawing files"')
-$wshell.SendKeys("{ENTER}")
-$wshell.SendKeys("nvim .{ENTER}")
-Start-Sleep -Milliseconds 500
-
+$commands = @('$Host.UI.RawUI.WindowTitle = "Drawing Files"', 'nvim .')
+CreateNewTab "Drawing Files" $commands
 
 # Tab 4
-$wshell.SendKeys("^+t")
-Start-Sleep -Milliseconds 500
-$wshell.SendKeys("cd \SIM-year1-base\term-1.1\ITP\Game-project\Submission\final-sub-folder\Platformania!{ENTER}")
-$wshell.SendKeys('$Host.UI.RawUI.WindowTitle = "toucher"')
-$wshell.SendKeys("{ENTER}")
-Start-Sleep -Milliseconds 500 
-
-# Tab 4
-$wshell.SendKeys("^+t")
-Start-Sleep -Milliseconds 500
-$wshell.SendKeys("cd \SIM-year1-base\term-1.1\ITP\Game-project\Submission\final-sub-folder\{ENTER}")
-$wshell.SendKeys('$Host.UI.RawUI.WindowTitle = "server"')
-$wshell.SendKeys("{ENTER}")
-$wshell.SendKeys("live-server Platformania!")
-$wshell.SendKeys("{ENTER}")
-Start-Sleep -Milliseconds 500
+$commands = @('$Host.UI.RawUI.WindowTitle = "Toucher"')
+CreateNewTab "Toucher" $commands
 
 # Tab 5
-$wshell.SendKeys("^+t")
-Start-Sleep -Milliseconds 500
-$wshell.SendKeys("cd \SIM-year1-base\term-1.1\ITP\Game-project\Submission\final-sub-folder\Platformania!{ENTER}")
-$wshell.SendKeys('$Host.UI.RawUI.WindowTitle = "Git"')
-$wshell.SendKeys("{ENTER}")
-$wshell.SendKeys("git log")
-$wshell.SendKeys("{ENTER}")
-Start-Sleep -Milliseconds 500
+$commands = @('$Host.UI.RawUI.WindowTitle = "Server"', 'cd.. && live-server Platformania!')
+CreateNewTab "Server" $commands
+
+# Tab 6
+$commands = @('$Host.UI.RawUI.WindowTitle = "Git"', 'git log')
+CreateNewTab "Git" $commands
+
