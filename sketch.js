@@ -34,6 +34,7 @@ let bullets = [];
 
 // declaring y position of floor throughout game
 const floorPos_y = 450;
+//let floorPos_y
 
 // damp letiable used for one pole filter
 const damp = 0.9;
@@ -104,6 +105,7 @@ function setup() {
   mode.gameMenu = true;
   levelDifficulty = 1;
   createCanvas(1024, 576);
+  //createCanvas(windowWidth, windowHeight);
   gameCharLives = 3;
   levelLength = 7000;
   resetSketch();
