@@ -214,8 +214,8 @@ function draw() {
     }
     if (isRight) {
       //testing
-      //gameChar_world_x += levelLength;
-      gameChar_world_x += 5;
+      gameChar_world_x += levelLength;
+      //gameChar_world_x += 5;
     } // prevent player from going beyond leftmost level boundry
     function CheckIfGameCharIsLeftBoundry() {
       if (gameChar_world_x < 100) {
